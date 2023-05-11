@@ -2,6 +2,9 @@ from flask import Flask, request, render_template
 from sklearn.preprocessing import LabelEncoder
 import pickle
 import numpy as np
+from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler(with_mean=False)
 
 app = Flask(__name__)
 encoder = LabelEncoder()
