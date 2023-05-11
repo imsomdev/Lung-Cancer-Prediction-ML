@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prediction Result</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        
+
+        .green {
+            color: green;
+        }
+
+        .red {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Prediction Result:</h1>
+    {% if prediction == 0 %}
+        <center><b><p class="green">No Lung Cancer Detected</p></b>
+    {% elif prediction == 1 %}
+    <center><b><p class="red">Lung Cancer Detected</p></b>
+    {% endif %}
+</body>
+</html>

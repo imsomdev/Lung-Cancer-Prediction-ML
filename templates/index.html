@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Lung Cancer Prediction</title>
+<style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url(https://img.freepik.com/free-vector/lungs-flat-icon-style_1308-126073.jpg?w=740&t=st=1683743037~exp=1683743637~hmac=67dfe718801f2195093aa1951a87636c54a6d0591882e308608cc629c39fcd17);
+      background-size: 100% 100%;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+  form {
+      max-width: 400px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+    }
+
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #888;
+    }
+
+    select,
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      transition: border-color 0.3s ease;
+    }
+
+    select {
+      height: 34px;
+      transition: transform 0.3s ease;
+      transform-origin: top;
+    }
+
+    select:focus {
+      outline: none;
+      border-color: #4CAF50;
+      transform: scale(1.05);
+    }
+
+    input[type="submit"] {
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      align-self: center;
+      transition: background-color 0.3s ease;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <h1>Lung Cancer Prediction</h1>
+  <form method="post" action="/predict">
+    <label for="gender">Gender:</label>
+    <select id="gender" name="gender">
+      <option value="M">Male</option>
+      <option value="F">Female</option>
+    </select>
+    <br><br>
+    
+    <label for="age">Age:</label>
+    <input type="text" id="age" name="age">
+    <br><br>
+    
+    <label for="smoking">Smoking:</label>
+    <select id="smoking" name="smoking">
+      <option value="2">Yes</option>
+      <option value="1">No</option>
+    </select>
+    <br><br>
+    
+    <label for="yellowFingers">Yellow Fingers:</label>
+    <select id="yellowFingers" name="yellowFingers">
+      <option value="2">Yes</option>
+      <option value="1">No</option>
+    </select>
+    <br><br>
+    
+    <label for="anxiety">Anxiety:</label>
+    <select id="anxiety" name="anxiety">
+      <option value="2">Yes</option>
+      <option value="1">No</option>
+    </select>
+    <br><br>
+    
+    <label for="peerPressure">Peer Pressure:</label>
+    <select id="peerPressure" name="peerPressure">
+      <option value="2">Yes</option>
+      <option value="1">No</option>
+    </select>
+    <br><br>
+    
+    <label for="chronicDisease">Chronic Disease:</label>
+    <select id="chronicDisease" name="chronicDisease">
+      <option value="2">Yes</option>
+      <option value="1">No</option>
+    </select>
+    <br><br>
+    
+    <label for="fatigue">Fatigue:</label>
+    <select id="fatigue" name="fatigue">
+      <option value="2">Yes</option>
+      <option value="1">No</option>
+    </select>
+    <br><br>
+    
+    <label for="allergy">Allergy:</label>
+    <select id="allergy" name="allergy">
+      <option value="2">Yes</option>
+      <option value="1">No</option>
+    </select>
+    <br><br>
+    
+    <label for="wheezing">Wheezing:</label>
+    <select id="wheezing" name="wheezing">
+      <option value="2">Yes</option>
+      <option value="1">No</option>
+    </select>
+    <br><br>
+    
+    <label for="alcoholConsuming">Alcohol Consuming:</label>
+    <select id="alcoholConsuming" name="alcoholConsuming">
+      <option value="2">Yes</option>
+      <option value="1">No</option>
+    </select>
+    <br><br>
+    
+    <label for="coughing">Coughing:</label>
+    <select id="coughing" name="coughing">
+      <option value="2">Yes</option>
+      <option value="1">No</option>
+    </select>
+    <br><br>
+
+    <label for="shortnessOfBreathe">Shortness Of Breathe:</label>
+    <select id="shortnessOfBreathe" name="shortnessOfBreathe">
+      <option value="2">Yes</option>
+      <option value="1">No</option>
+    </select>
+    <br><br>
+
+    <label for="swallowingDifficulty">Swallowing Difficulty:</label>
+    <select id="swallowingDifficulty" name="swallowingDifficulty">
+      <option value="2">Yes</option>
+      <option value="1">No</option>
+    </select>
+    <br><br>
+
+    <label for="chestPain">Chest Pain:</label>
+    <select id="chestPain" name="chestPain">
+      <option value="2">Yes</option>
+      <option value="1">No</option>
+    </select>
+    <br><br>
+
+    
+    <input type="submit" value="Predict">
+  </form>
+  <div class="result" id="resultContainer" style="display: none;">
+    <h2>Prediction Result:</h2>
+    <p id="predictionResult"></p>
+</div>
+</div>
+
+<script>
+const form = document.getElementById('assessmentForm');
+const resultContainer = document.getElementById('resultContainer');
+const predictionResult = document.getElementById('predictionResult');
+
+form.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const gender = document.getElementById('gender').value;
+    const age = document.getElementById('age').value;
+    const smoking = document.getElementById('smoking').value;
+
+    // Make an API call or perform prediction logic here
+    // Replace the below line with your actual prediction logic
+    const prediction = Math.random() < 0.5 ? '0' : '1';
+
+    if (prediction === '0') {
+        predictionResult.innerText = 'No Lung Cancer Detected';
+        predictionResult.classList.add('green');
+        predictionResult.classList.remove('red');
+    } else if (prediction === '1') {
+        predictionResult.innerText = 'Lung Cancer Detected';
+        predictionResult.classList.add('red');
+        predictionResult.classList.remove('green');
+    }
+
+    resultContainer.style.display = 'block';
+});
+</script>
+</body>
+</html>
