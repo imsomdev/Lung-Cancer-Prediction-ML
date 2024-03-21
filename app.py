@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, make_response
 from sklearn.preprocessing import LabelEncoder
 import pickle
 import numpy as np
@@ -17,35 +17,39 @@ def index():
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    gender=request.form.get('gender')
-    age=int(request.form.get('age'))
-    smoking=int(request.form.get('smoking'))
-    yellowFingers=int(request.form.get('yellowFingers'))
-    anxiety=int(request.form.get('anxiety'))
-    peerPressure=int(request.form.get('peerPressure'))
-    chronicDisease=int(request.form.get('chronicDisease'))
-    fatigue=int(request.form.get('fatigue'))
-    allergy=int(request.form.get('allergy'))
-    wheezing=int(request.form.get('wheezing'))
-    alcoholConsuming=int(request.form.get('alcoholConsuming'))
-    coughing=int(request.form.get('coughing'))
-    shortnessOfBreathe=int(request.form.get('shortnessOfBreathe'))
-    swallowingDifficulty=int(request.form.get('swallowingDifficulty'))
-    chestPain=int(request.form.get('chestPain'))
+    try:
+        gender=request.form.get('gender')
+        age=int(request.form.get('age'))
+        smoking=int(request.form.get('smoking'))
+        yellowFingers=int(request.form.get('yellowFingers'))
+        anxiety=int(request.form.get('anxiety'))
+        peerPressure=int(request.form.get('peerPressure'))
+        chronicDisease=int(request.form.get('chronicDisease'))
+        fatigue=int(request.form.get('fatigue'))
+        allergy=int(request.form.get('allergy'))
+        wheezing=int(request.form.get('wheezing'))
+        alcoholConsuming=int(request.form.get('alcoholConsuming'))
+        coughing=int(request.form.get('coughing'))
+        shortnessOfBreathe=int(request.form.get('shortnessOfBreathe'))
+        swallowingDifficulty=int(request.form.get('swallowingDifficulty'))
+        chestPain=int(request.form.get('chestPain'))
 
-    gender = encoder.transform([gender])[0]
-    app.logger.info(f"gender: {gender}, age: {age}, smoking: {smoking}, yellowFingers: {yellowFingers}, anxiety: {anxiety}, peerPressure: {peerPressure}, chronicDisease: {chronicDisease}, fatigue: {fatigue}, allergy: {allergy}, wheezing: {wheezing}, alcoholConsuming: {alcoholConsuming}, coughing: {coughing}, shortnessOfBreathe: {shortnessOfBreathe}, swallowingDifficulty: {swallowingDifficulty}, chestPain: {chestPain}")
+        gender = encoder.transform([gender])[0]
+        app.logger.info(f"gender: {gender}, age: {age}, smoking: {smoking}, yellowFingers: {yellowFingers}, anxiety: {anxiety}, peerPressure: {peerPressure}, chronicDisease: {chronicDisease}, fatigue: {fatigue}, allergy: {allergy}, wheezing: {wheezing}, alcoholConsuming: {alcoholConsuming}, coughing: {coughing}, shortnessOfBreathe: {shortnessOfBreathe}, swallowingDifficulty: {swallowingDifficulty}, chestPain: {chestPain}")
 
-    # Store all the input data in the array
-    #prediction
-    input_data=[gender,age,smoking,yellowFingers,anxiety,peerPressure,chronicDisease,fatigue,allergy,wheezing,alcoholConsuming,coughing,shortnessOfBreathe,swallowingDifficulty,chestPain]
-    
-    input_data = np.where(np.asarray(input_data) == 1, 0, 1)
-    input_data_as_numpy_array = np.asarray(input_data)
-    input_data_reshaped = input_data_as_numpy_array.reshape(1, -1)
-    std_data = scaler.transform(input_data_reshaped)
-    prediction = model.predict(std_data)
-    return render_template('result.html', prediction=prediction[0])
+        # Store all the input data in the array
+        #prediction
+        input_data=[gender,age,smoking,yellowFingers,anxiety,peerPressure,chronicDisease,fatigue,allergy,wheezing,alcoholConsuming,coughing,shortnessOfBreathe,swallowingDifficulty,chestPain]
+        
+        input_data = np.where(np.asarray(input_data) == 1, 0, 1)
+        input_data_as_numpy_array = np.asarray(input_data)
+        input_data_reshaped = input_data_as_numpy_array.reshape(1, -1)
+        std_data = scaler.transform(input_data_reshaped)
+        prediction = model.predict(std_data)
+        return render_template('result.html', prediction=prediction[0])
+    except ValueError:
+        response = make_response("Please Enter Your Age", 400)
+        return response
 
 if __name__ == '__main__':
-    app.run(app.run(host='0.0.0.0', port=5000))
+    app.run(host='0.0.0.0', port=5000, debug=False)
