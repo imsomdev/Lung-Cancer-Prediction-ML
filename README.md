@@ -42,6 +42,9 @@ docker-compose up --build -d
 
 # View logs
 docker-compose logs -f
+
+# Stop the service
+docker-compose down
 ```
 
 #### Using Docker
@@ -49,9 +52,13 @@ docker-compose logs -f
 # Build the image
 docker build -t lung-cancer-prediction .
 
-# Run the container
+# Run the container (localhost only)
 docker run -p 5000:5000 lung-cancer-prediction
 ```
+
+**Note**: The application binds to `localhost:5000` only for security. Access at:
+- Local: http://localhost:5000
+- Or: http://127.0.0.1:5000
 
 ### Production Deployment
 
