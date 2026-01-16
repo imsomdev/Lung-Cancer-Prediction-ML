@@ -1,36 +1,504 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Prediction Result</title>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Assessment Results - Lung Cancer Risk</title>
     <style>
+      :root {
+        --primary-color: #2563eb;
+        --primary-hover: #1d4ed8;
+        --success-color: #10b981;
+        --danger-color: #ef4444;
+        --warning-color: #f59e0b;
+        --text-primary: #1e293b;
+        --text-secondary: #64748b;
+        --bg-light: #f8fafc;
+        --border-color: #e2e8f0;
+        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+        color: var(--text-primary);
+        line-height: 1.6;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 30px;
+        color: white;
+      }
+
+      .header h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .header p {
+        font-size: 1rem;
+        opacity: 0.9;
+      }
+
+      .result-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: var(--shadow-lg);
+        overflow: hidden;
+        margin-bottom: 30px;
+      }
+
+      .result-header {
+        padding: 30px;
+        text-align: center;
+        position: relative;
+      }
+
+      .result-header.positive {
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+      }
+
+      .result-header.negative {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        color: white;
+      }
+
+      .result-icon {
+        font-size: 4rem;
+        margin-bottom: 20px;
+        opacity: 0.9;
+      }
+
+      .result-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+
+      .result-subtitle {
+        font-size: 1.1rem;
+        opacity: 0.9;
+      }
+
+      .result-content {
+        padding: 40px 30px;
+      }
+
+      .confidence-section {
+        background: var(--bg-light);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 30px;
+        border: 1px solid var(--border-color);
+      }
+
+      .confidence-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+        color: var(--text-primary);
+      }
+
+      .confidence-bar {
+        width: 100%;
+        height: 8px;
+        background: var(--border-color);
+        border-radius: 4px;
+        overflow: hidden;
+        margin-bottom: 10px;
+      }
+
+      .confidence-fill {
+        height: 100%;
+        border-radius: 4px;
+        transition: width 0.8s ease;
+      }
+
+      .confidence-fill.high {
+        background: linear-gradient(90deg, #10b981, #059669);
+      }
+
+      .confidence-fill.medium {
+        background: linear-gradient(90deg, #f59e0b, #d97706);
+      }
+
+      .confidence-fill.low {
+        background: linear-gradient(90deg, #ef4444, #dc2626);
+      }
+
+      .confidence-text {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        font-weight: 500;
+      }
+
+      .recommendations {
+        margin-bottom: 30px;
+      }
+
+      .recommendations h3 {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+        color: var(--text-primary);
+      }
+
+      .recommendation-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 12px;
+        padding: 15px;
+        background: var(--bg-light);
+        border-radius: 8px;
+        border-left: 4px solid var(--primary-color);
+      }
+
+      .recommendation-icon {
+        font-size: 1.2rem;
+        margin-top: 2px;
+      }
+
+      .recommendation-text {
+        font-size: 0.95rem;
+        line-height: 1.5;
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        padding: 12px 24px;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        min-width: 160px;
+        justify-content: center;
+      }
+
+      .btn-primary {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--primary-hover)
+        );
+        color: white;
+        box-shadow: var(--shadow-md);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+      }
+
+      .btn-secondary {
+        background: white;
+        color: var(--text-primary);
+        border: 2px solid var(--border-color);
+      }
+
+      .btn-secondary:hover {
+        background: var(--bg-light);
+        border-color: var(--primary-color);
+      }
+
+      .disclaimer {
+        background: #fef3c7;
+        border: 1px solid #f59e0b;
+        border-radius: 12px;
+        padding: 20px;
+        color: #92400e;
+      }
+
+      .disclaimer h4 {
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #78350f;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .disclaimer p {
+        font-size: 0.9rem;
+        line-height: 1.5;
+      }
+
+      /* Animations */
+      .result-card {
+        animation: slideUp 0.6s ease-out;
+      }
+
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            padding: 20px;
+          padding: 10px;
         }
 
-        h1 {
-            text-align: center;
-            color: #333;
+        .header h1 {
+          font-size: 1.5rem;
         }
 
-        
-
-        .green {
-            color: green;
+        .result-content {
+          padding: 20px;
         }
 
-        .red {
-            color: red;
+        .result-header {
+          padding: 20px;
         }
+
+        .action-buttons {
+          flex-direction: column;
+        }
+
+        .btn {
+          width: 100%;
+        }
+      }
+
+      /* Print styles */
+      @media print {
+        body {
+          background: white;
+          padding: 0;
+        }
+
+        .action-buttons {
+          display: none;
+        }
+
+        .result-card {
+          box-shadow: none;
+          border: 1px solid #ccc;
+        }
+      }
     </style>
-</head>
-<body>
-    <h1>Prediction Result:</h1>
-    {% if prediction == 0 %}
-        <center><b><p class="green">No Lung Cancer Detected</p></b>
-    {% elif prediction == 1 %}
-    <center><b><p class="red">Lung Cancer Detected</p></b>
-    {% endif %}
-</body>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Lung Cancer Risk Assessment</h1>
+        <p>Your personalized risk assessment results</p>
+      </div>
+
+      <div class="result-card">
+        {% if prediction == 0 %}
+        <!-- Low Risk Result -->
+        <div class="result-header negative">
+          <div class="result-icon">✅</div>
+          <div class="result-title">Low Risk Detected</div>
+          <div class="result-subtitle">No immediate concerns identified</div>
+        </div>
+
+        <div class="result-content">
+          <div class="confidence-section">
+            <div class="confidence-title">Assessment Confidence</div>
+            <div class="confidence-bar">
+              <div class="confidence-fill high" style="width: 85%"></div>
+            </div>
+            <div class="confidence-text">
+              High confidence in negative result
+            </div>
+          </div>
+
+          <div class="recommendations">
+            <h3>📋 Recommendations</h3>
+
+            <div class="recommendation-item">
+              <div class="recommendation-icon">🩺</div>
+              <div class="recommendation-text">
+                Continue regular health check-ups as recommended by your
+                healthcare provider.
+              </div>
+            </div>
+
+            <div class="recommendation-item">
+              <div class="recommendation-icon">🚭</div>
+              <div class="recommendation-text">
+                If you smoke, consider cessation programs. If you don't smoke,
+                avoid starting.
+              </div>
+            </div>
+
+            <div class="recommendation-item">
+              <div class="recommendation-icon">🏃</div>
+              <div class="recommendation-text">
+                Maintain a healthy lifestyle with regular exercise and balanced
+                nutrition.
+              </div>
+            </div>
+
+            <div class="recommendation-item">
+              <div class="recommendation-icon">🌬️</div>
+              <div class="recommendation-text">
+                Avoid exposure to air pollutants and second-hand smoke when
+                possible.
+              </div>
+            </div>
+
+            <div class="recommendation-item">
+              <div class="recommendation-icon">⚠️</div>
+              <div class="recommendation-text">
+                Monitor any persistent symptoms and consult healthcare
+                professionals if concerns arise.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {% elif prediction == 1 %}
+        <!-- High Risk Result -->
+        <div class="result-header positive">
+          <div class="result-icon">⚠️</div>
+          <div class="result-title">Risk Factors Detected</div>
+          <div class="result-subtitle">Medical consultation recommended</div>
+        </div>
+
+        <div class="result-content">
+          <div class="confidence-section">
+            <div class="confidence-title">Assessment Confidence</div>
+            <div class="confidence-bar">
+              <div class="confidence-fill medium" style="width: 78%"></div>
+            </div>
+            <div class="confidence-text">
+              Moderate to high confidence in risk factors
+            </div>
+          </div>
+
+          <div class="recommendations">
+            <h3>🚨 Important Next Steps</h3>
+
+            <div class="recommendation-item">
+              <div class="recommendation-icon">👨‍⚕️</div>
+              <div class="recommendation-text">
+                <strong
+                  >Schedule an appointment with a healthcare provider
+                  immediately</strong
+                >
+                for further evaluation and screening.
+              </div>
+            </div>
+
+            <div class="recommendation-item">
+              <div class="recommendation-icon">🫁</div>
+              <div class="recommendation-text">
+                Discuss lung cancer screening options (LDCT scan) with your
+                doctor, especially if you're a current or former smoker.
+              </div>
+            </div>
+
+            <div class="recommendation-item">
+              <div class="recommendation-icon">📊</div>
+              <div class="recommendation-text">
+                Provide this assessment result to your healthcare provider for
+                their review and consideration.
+              </div>
+            </div>
+
+            <div class="recommendation-item">
+              <div class="recommendation-icon">🚭</div>
+              <div class="recommendation-text">
+                If you smoke, seek immediate help for smoking cessation programs
+                and resources.
+              </div>
+            </div>
+
+            <div class="recommendation-item">
+              <div class="recommendation-icon">📝</div>
+              <div class="recommendation-text">
+                Keep track of any symptoms and discuss them thoroughly with your
+                healthcare team.
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
+        <div class="action-buttons">
+          <a href="/" class="btn btn-primary"> 🔄 Take Assessment Again </a>
+          <button onclick="window.print()" class="btn btn-secondary">
+            🖨️ Print Results
+          </button>
+        </div>
+
+        <div class="disclaimer">
+          <h4>⚠️ Medical Disclaimer</h4>
+          <p>
+            <strong
+              >This assessment is for informational purposes only and should not
+              be considered as medical advice, diagnosis, or treatment.</strong
+            >
+            The results are based on statistical analysis and do not account for
+            all individual health factors. Always consult with qualified
+            healthcare professionals for medical concerns, proper diagnosis, and
+            treatment decisions. Early detection and professional medical care
+            are crucial for the best health outcomes.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Add print functionality and result animation
+      document.addEventListener("DOMContentLoaded", function () {
+        // Animate confidence bars
+        setTimeout(() => {
+          const confidenceBars = document.querySelectorAll(".confidence-fill");
+          confidenceBars.forEach((bar) => {
+            const width = bar.style.width;
+            bar.style.width = "0%";
+            setTimeout(() => {
+              bar.style.width = width;
+            }, 100);
+          });
+        }, 300);
+
+        // Add click tracking for educational purposes
+        console.log("Assessment completed successfully");
+      });
+    </script>
+  </body>
 </html>

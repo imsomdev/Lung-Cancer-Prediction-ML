@@ -1,218 +1,1123 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <title>Lung Cancer Prediction</title>
-<style>
-    body {
-      font-family: Arial, sans-serif;
-      background-image: url(https://img.freepik.com/free-vector/lungs-flat-icon-style_1308-126073.jpg?w=740&t=st=1683743037~exp=1683743637~hmac=67dfe718801f2195093aa1951a87636c54a6d0591882e308608cc629c39fcd17);
-      background-size: 100% 100%;
-      padding: 20px;
-    }
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lung Cancer Risk Assessment</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-    h1 {
-      text-align: center;
-      color: #333;
-    }
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        min-height: 100vh;
+        padding: 20px;
+        color: #333;
+      }
 
-  form {
-      max-width: 400px;
-      margin: 0 auto;
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 5px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-      display: flex;
-      flex-direction: column;
-    }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+      }
 
+      .header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
 
-    label {
-      display: block;
-      margin-bottom: 8px;
-      color: #888;
-    }
+      .header h1 {
+        font-size: 2.5rem;
+        color: #2c3e50;
+        margin-bottom: 10px;
+      }
 
-    select,
-    input[type="text"] {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box;
-      transition: border-color 0.3s ease;
-    }
+      .header p {
+        font-size: 1.1rem;
+        color: #666;
+        max-width: 600px;
+        margin: 0 auto;
+      }
 
-    select {
-      height: 34px;
-      transition: transform 0.3s ease;
-      transform-origin: top;
-    }
+      .assessment-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
 
-    select:focus {
-      outline: none;
-      border-color: #4CAF50;
-      transform: scale(1.05);
-    }
+      .card-header {
+        background: #3498db;
+        color: white;
+        padding: 20px;
+        text-align: center;
+      }
 
-    input[type="submit"] {
-      background-color: #4CAF50;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 4px;
-      cursor: pointer;
-      align-self: center;
-      transition: background-color 0.3s ease;
-    }
+      .card-header h2 {
+        font-size: 1.5rem;
+        margin-bottom: 5px;
+      }
 
-    input[type="submit"]:hover {
-      background-color: #45a049;
-    }
-  </style>
-</head>
-<body>
-  <h1>Lung Cancer Prediction</h1>
-  <form method="post" action="/predict">
-    <label for="gender">Gender:</label>
-    <select id="gender" name="gender">
-      <option value="M">Male</option>
-      <option value="F">Female</option>
-    </select>
-    <br><br>
-    
-    <label for="age">Age:</label>
-    <input type="text" id="age" name="age">
-    <br><br>
-    
-    <label for="smoking">Smoking:</label>
-    <select id="smoking" name="smoking">
-      <option value="2">Yes</option>
-      <option value="1">No</option>
-    </select>
-    <br><br>
-    
-    <label for="yellowFingers">Yellow Fingers:</label>
-    <select id="yellowFingers" name="yellowFingers">
-      <option value="2">Yes</option>
-      <option value="1">No</option>
-    </select>
-    <br><br>
-    
-    <label for="anxiety">Anxiety:</label>
-    <select id="anxiety" name="anxiety">
-      <option value="2">Yes</option>
-      <option value="1">No</option>
-    </select>
-    <br><br>
-    
-    <label for="peerPressure">Peer Pressure:</label>
-    <select id="peerPressure" name="peerPressure">
-      <option value="2">Yes</option>
-      <option value="1">No</option>
-    </select>
-    <br><br>
-    
-    <label for="chronicDisease">Chronic Disease:</label>
-    <select id="chronicDisease" name="chronicDisease">
-      <option value="2">Yes</option>
-      <option value="1">No</option>
-    </select>
-    <br><br>
-    
-    <label for="fatigue">Fatigue:</label>
-    <select id="fatigue" name="fatigue">
-      <option value="2">Yes</option>
-      <option value="1">No</option>
-    </select>
-    <br><br>
-    
-    <label for="allergy">Allergy:</label>
-    <select id="allergy" name="allergy">
-      <option value="2">Yes</option>
-      <option value="1">No</option>
-    </select>
-    <br><br>
-    
-    <label for="wheezing">Wheezing:</label>
-    <select id="wheezing" name="wheezing">
-      <option value="2">Yes</option>
-      <option value="1">No</option>
-    </select>
-    <br><br>
-    
-    <label for="alcoholConsuming">Alcohol Consuming:</label>
-    <select id="alcoholConsuming" name="alcoholConsuming">
-      <option value="2">Yes</option>
-      <option value="1">No</option>
-    </select>
-    <br><br>
-    
-    <label for="coughing">Coughing:</label>
-    <select id="coughing" name="coughing">
-      <option value="2">Yes</option>
-      <option value="1">No</option>
-    </select>
-    <br><br>
+      .card-header p {
+        opacity: 0.9;
+      }
 
-    <label for="shortnessOfBreathe">Shortness Of Breathe:</label>
-    <select id="shortnessOfBreathe" name="shortnessOfBreathe">
-      <option value="2">Yes</option>
-      <option value="1">No</option>
-    </select>
-    <br><br>
+      .stepper {
+        background: #ecf0f1;
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
 
-    <label for="swallowingDifficulty">Swallowing Difficulty:</label>
-    <select id="swallowingDifficulty" name="swallowingDifficulty">
-      <option value="2">Yes</option>
-      <option value="1">No</option>
-    </select>
-    <br><br>
+      .step {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.9rem;
+      }
 
-    <label for="chestPain">Chest Pain:</label>
-    <select id="chestPain" name="chestPain">
-      <option value="2">Yes</option>
-      <option value="1">No</option>
-    </select>
-    <br><br>
+      .step-number {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: #bdc3c7;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+        font-weight: bold;
+      }
 
-    
-    <input type="submit" value="Predict">
-  </form>
-  <div class="result" id="resultContainer" style="display: none;">
-    <h2>Prediction Result:</h2>
-    <p id="predictionResult"></p>
-</div>
-</div>
+      .step.active .step-number {
+        background: #3498db;
+      }
 
-<script>
-const form = document.getElementById('assessmentForm');
-const resultContainer = document.getElementById('resultContainer');
-const predictionResult = document.getElementById('predictionResult');
+      .step.completed .step-number {
+        background: #27ae60;
+      }
 
-form.addEventListener('submit', (event) => {
-    event.preventDefault();
+      .step.active {
+        color: #3498db;
+        font-weight: bold;
+      }
 
-    const gender = document.getElementById('gender').value;
-    const age = document.getElementById('age').value;
-    const smoking = document.getElementById('smoking').value;
+      .step.completed {
+        color: #27ae60;
+      }
 
-    // Make an API call or perform prediction logic here
-    // Replace the below line with your actual prediction logic
-    const prediction = Math.random() < 0.5 ? '0' : '1';
+      .form-container {
+        padding: 30px;
+      }
 
-    if (prediction === '0') {
-        predictionResult.innerText = 'No Lung Cancer Detected';
-        predictionResult.classList.add('green');
-        predictionResult.classList.remove('red');
-    } else if (prediction === '1') {
-        predictionResult.innerText = 'Lung Cancer Detected';
-        predictionResult.classList.add('red');
-        predictionResult.classList.remove('green');
-    }
+      .progress-bar {
+        width: 100%;
+        height: 6px;
+        background: #ecf0f1;
+        border-radius: 3px;
+        margin-bottom: 20px;
+        overflow: hidden;
+      }
 
-    resultContainer.style.display = 'block';
-});
-</script>
-</body>
+      .progress-fill {
+        height: 100%;
+        background: #3498db;
+        border-radius: 3px;
+        transition: width 0.3s ease;
+        width: 25%;
+      }
+
+      .form-step {
+        display: none;
+      }
+
+      .form-step.active {
+        display: block;
+      }
+
+      .step-title {
+        font-size: 1.4rem;
+        color: #2c3e50;
+        margin-bottom: 5px;
+      }
+
+      .step-description {
+        color: #666;
+        margin-bottom: 25px;
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 25px;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      .form-group label {
+        display: block;
+        font-weight: 500;
+        margin-bottom: 5px;
+        color: #555;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 10px 12px;
+        border: 2px solid #ddd;
+        border-radius: 4px;
+        font-size: 1rem;
+        transition: border-color 0.3s;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background-image: none;
+      }
+
+      .form-control:focus {
+        outline: none;
+        border-color: #3498db;
+      }
+
+      .form-control.error {
+        border-color: #e74c3c;
+      }
+
+      .select-wrapper {
+        position: relative;
+      }
+
+      .select-wrapper::after {
+        content: "▼";
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+        color: #666;
+      }
+
+      .error-message {
+        color: #e74c3c;
+        font-size: 0.85rem;
+        margin-top: 5px;
+        display: none;
+      }
+
+      .navigation {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+      }
+
+      .btn {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 4px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .btn-secondary {
+        background: #95a5a6;
+        color: white;
+      }
+
+      .btn-secondary:hover:not(:disabled) {
+        background: #7f8c8d;
+      }
+
+      .btn-primary {
+        background: #3498db;
+        color: white;
+      }
+
+      .btn-primary:hover:not(:disabled) {
+        background: #2980b9;
+      }
+
+      .disclaimer {
+        background: #f39c12;
+        color: white;
+        padding: 15px;
+        margin-top: 20px;
+        border-radius: 4px;
+        text-align: center;
+      }
+
+      .disclaimer h4 {
+        margin-bottom: 8px;
+      }
+
+      .disclaimer p {
+        font-size: 0.9rem;
+        line-height: 1.4;
+      }
+
+      .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+      }
+
+      .loading-content {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        text-align: center;
+      }
+
+      .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #3498db;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 15px;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Modal Styles */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+      }
+
+      .modal-content {
+        background: white;
+        border-radius: 8px;
+        max-width: 500px;
+        width: 90%;
+        max-height: 80vh;
+        overflow-y: auto;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .modal-header {
+        background: #3498db;
+        color: white;
+        padding: 15px 20px;
+        border-radius: 8px 8px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .modal-header h3 {
+        margin: 0;
+        font-size: 1.3rem;
+      }
+
+      .close-btn {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 0;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: background 0.3s;
+      }
+
+      .close-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      .modal-body {
+        padding: 20px;
+        text-align: center;
+      }
+
+      .result-positive {
+        color: #e74c3c;
+        font-weight: bold;
+        font-size: 1.2rem;
+      }
+
+      .result-negative {
+        color: #27ae60;
+        font-weight: bold;
+        font-size: 1.2rem;
+      }
+
+      .modal-actions {
+        margin-top: 20px;
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+      }
+
+      .modal-actions button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1rem;
+      }
+
+      .btn-modal-primary {
+        background: #3498db;
+        color: white;
+      }
+
+      .btn-modal-secondary {
+        background: #95a5a6;
+        color: white;
+      }
+
+      @media (max-width: 768px) {
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .stepper {
+          flex-wrap: wrap;
+          gap: 10px;
+        }
+
+        .step {
+          font-size: 0.8rem;
+        }
+
+        .step-number {
+          width: 20px;
+          height: 20px;
+          font-size: 0.7rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Lung Cancer Risk Assessment</h1>
+      </div>
+
+      <div class="assessment-card">
+        <div class="card-header">
+          <h2>Health Assessment</h2>
+          <p>Please answer all questions honestly for accurate results</p>
+        </div>
+
+        <div class="stepper">
+          <div class="step active" data-step="1">
+            <div class="step-number">1</div>
+            <span>Personal Info</span>
+          </div>
+          <div class="step" data-step="2">
+            <div class="step-number">2</div>
+            <span>Lifestyle</span>
+          </div>
+          <div class="step" data-step="3">
+            <div class="step-number">3</div>
+            <span>Physical Health</span>
+          </div>
+          <div class="step" data-step="4">
+            <div class="step-number">4</div>
+            <span>Symptoms</span>
+          </div>
+        </div>
+
+        <div class="form-container">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+
+          <form id="assessmentForm" method="post" action="/predict">
+            <!-- Step 1: Personal Information -->
+            <div class="form-step active" data-step="1">
+              <h3 class="step-title">Personal Information</h3>
+              <p class="step-description">
+                Let's start with some basic information about you.
+              </p>
+
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="gender">Gender</label>
+                  <div class="select-wrapper">
+                    <select
+                      id="gender"
+                      name="gender"
+                      class="form-control"
+                      required
+                    >
+                      <option value="">Select Gender</option>
+                      <option value="M">Male</option>
+                      <option value="F">Female</option>
+                    </select>
+                  </div>
+                  <div class="error-message">Please select your gender</div>
+                </div>
+
+                <div class="form-group">
+                  <label for="age">Age</label>
+                  <input
+                    type="number"
+                    id="age"
+                    name="age"
+                    class="form-control"
+                    placeholder="Enter your age"
+                    min="1"
+                    max="120"
+                    required
+                  />
+                  <div class="error-message">
+                    Please enter a valid age (1-120)
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 2: Lifestyle Factors -->
+            <div class="form-step" data-step="2">
+              <h3 class="step-title">Lifestyle Factors</h3>
+              <p class="step-description">
+                These questions help us understand your lifestyle and habits.
+              </p>
+
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="smoking">Do you smoke?</label>
+                  <div class="select-wrapper">
+                    <select
+                      id="smoking"
+                      name="smoking"
+                      class="form-control"
+                      required
+                    >
+                      <option value="">Select an option</option>
+                      <option value="2">Yes</option>
+                      <option value="1">No</option>
+                    </select>
+                  </div>
+                  <div class="error-message">Please select an option</div>
+                </div>
+
+                <div class="form-group">
+                  <label for="alcoholConsuming">Do you consume alcohol?</label>
+                  <div class="select-wrapper">
+                    <select
+                      id="alcoholConsuming"
+                      name="alcoholConsuming"
+                      class="form-control"
+                      required
+                    >
+                      <option value="">Select an option</option>
+                      <option value="2">Yes</option>
+                      <option value="1">No</option>
+                    </select>
+                  </div>
+                  <div class="error-message">Please select an option</div>
+                </div>
+
+                <div class="form-group">
+                  <label for="peerPressure"
+                    >Peer pressure related to smoking/drinking?</label
+                  >
+                  <div class="select-wrapper">
+                    <select
+                      id="peerPressure"
+                      name="peerPressure"
+                      class="form-control"
+                      required
+                    >
+                      <option value="">Select an option</option>
+                      <option value="2">Yes</option>
+                      <option value="1">No</option>
+                    </select>
+                  </div>
+                  <div class="error-message">Please select an option</div>
+                </div>
+
+                <div class="form-group">
+                  <label for="yellowFingers">Do you have yellow fingers?</label>
+                  <div class="select-wrapper">
+                    <select
+                      id="yellowFingers"
+                      name="yellowFingers"
+                      class="form-control"
+                      required
+                    >
+                      <option value="">Select an option</option>
+                      <option value="2">Yes</option>
+                      <option value="1">No</option>
+                    </select>
+                  </div>
+                  <div class="error-message">Please select an option</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 3: Physical Health -->
+            <div class="form-step" data-step="3">
+              <h3 class="step-title">Physical Health</h3>
+              <p class="step-description">
+                Tell us about your general physical condition and any chronic
+                conditions.
+              </p>
+
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="chronicDisease"
+                    >Do you have any chronic disease?</label
+                  >
+                  <div class="select-wrapper">
+                    <select
+                      id="chronicDisease"
+                      name="chronicDisease"
+                      class="form-control"
+                      required
+                    >
+                      <option value="">Select an option</option>
+                      <option value="2">Yes</option>
+                      <option value="1">No</option>
+                    </select>
+                  </div>
+                  <div class="error-message">Please select an option</div>
+                </div>
+
+                <div class="form-group">
+                  <label for="fatigue">Do you experience fatigue?</label>
+                  <div class="select-wrapper">
+                    <select
+                      id="fatigue"
+                      name="fatigue"
+                      class="form-control"
+                      required
+                    >
+                      <option value="">Select an option</option>
+                      <option value="2">Yes</option>
+                      <option value="1">No</option>
+                    </select>
+                  </div>
+                  <div class="error-message">Please select an option</div>
+                </div>
+
+                <div class="form-group">
+                  <label for="allergy">Do you have allergies?</label>
+                  <div class="select-wrapper">
+                    <select
+                      id="allergy"
+                      name="allergy"
+                      class="form-control"
+                      required
+                    >
+                      <option value="">Select an option</option>
+                      <option value="2">Yes</option>
+                      <option value="1">No</option>
+                    </select>
+                  </div>
+                  <div class="error-message">Please select an option</div>
+                </div>
+
+                <div class="form-group">
+                  <label for="wheezing">Do you experience wheezing?</label>
+                  <div class="select-wrapper">
+                    <select
+                      id="wheezing"
+                      name="wheezing"
+                      class="form-control"
+                      required
+                    >
+                      <option value="">Select an option</option>
+                      <option value="2">Yes</option>
+                      <option value="1">No</option>
+                    </select>
+                  </div>
+                  <div class="error-message">Please select an option</div>
+                </div>
+
+                <div class="form-group">
+                  <label for="anxiety">Do you experience anxiety?</label>
+                  <div class="select-wrapper">
+                    <select
+                      id="anxiety"
+                      name="anxiety"
+                      class="form-control"
+                      required
+                    >
+                      <option value="">Select an option</option>
+                      <option value="2">Yes</option>
+                      <option value="1">No</option>
+                    </select>
+                  </div>
+                  <div class="error-message">Please select an option</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 4: Respiratory Symptoms -->
+            <div class="form-step" data-step="4">
+              <h3 class="step-title">Respiratory Symptoms</h3>
+              <p class="step-description">
+                These questions focus on respiratory and chest-related symptoms.
+              </p>
+
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="coughing">Do you have a persistent cough?</label>
+                  <div class="select-wrapper">
+                    <select
+                      id="coughing"
+                      name="coughing"
+                      class="form-control"
+                      required
+                    >
+                      <option value="">Select an option</option>
+                      <option value="2">Yes</option>
+                      <option value="1">No</option>
+                    </select>
+                  </div>
+                  <div class="error-message">Please select an option</div>
+                </div>
+
+                <div class="form-group">
+                  <label for="shortnessOfBreathe">Shortness of breath?</label>
+                  <div class="select-wrapper">
+                    <select
+                      id="shortnessOfBreathe"
+                      name="shortnessOfBreathe"
+                      class="form-control"
+                      required
+                    >
+                      <option value="">Select an option</option>
+                      <option value="2">Yes</option>
+                      <option value="1">No</option>
+                    </select>
+                  </div>
+                  <div class="error-message">Please select an option</div>
+                </div>
+
+                <div class="form-group">
+                  <label for="swallowingDifficulty"
+                    >Difficulty swallowing?</label
+                  >
+                  <div class="select-wrapper">
+                    <select
+                      id="swallowingDifficulty"
+                      name="swallowingDifficulty"
+                      class="form-control"
+                      required
+                    >
+                      <option value="">Select an option</option>
+                      <option value="2">Yes</option>
+                      <option value="1">No</option>
+                    </select>
+                  </div>
+                  <div class="error-message">Please select an option</div>
+                </div>
+
+                <div class="form-group">
+                  <label for="chestPain">Do you experience chest pain?</label>
+                  <div class="select-wrapper">
+                    <select
+                      id="chestPain"
+                      name="chestPain"
+                      class="form-control"
+                      required
+                    >
+                      <option value="">Select an option</option>
+                      <option value="2">Yes</option>
+                      <option value="1">No</option>
+                    </select>
+                  </div>
+                  <div class="error-message">Please select an option</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="navigation">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                id="prevBtn"
+                disabled
+              >
+                ← Previous
+              </button>
+
+              <button type="button" class="btn btn-primary" id="nextBtn">
+                Next →
+              </button>
+
+              <button
+                type="submit"
+                class="btn btn-primary"
+                id="submitBtn"
+                style="display: none"
+              >
+                Get Results
+              </button>
+            </div>
+          </form>
+
+          <div class="disclaimer">
+            <h4>⚠️ Important Disclaimer</h4>
+            <p>
+              This assessment tool is for educational and informational purposes
+              only. The results should not be considered as medical advice,
+              diagnosis, or treatment. Always consult with qualified healthcare
+              professionals for medical concerns. Early detection and proper
+              medical care are crucial for health outcomes.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="loading-overlay" id="loadingOverlay">
+      <div class="loading-content">
+        <div class="spinner"></div>
+        <h3>Analyzing your assessment...</h3>
+        <p>Please wait while we process your information</p>
+      </div>
+    </div>
+
+    <!-- Result Modal -->
+    <div class="modal-overlay" id="resultModal" style="display: none">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Assessment Results</h3>
+          <button class="close-btn" onclick="closeResultModal()">
+            &times;
+          </button>
+        </div>
+        <div class="modal-body" id="resultContent">
+          <!-- Result will be inserted here -->
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        let currentStep = 1;
+        const totalSteps = 4;
+
+        // Elements
+        const steps = document.querySelectorAll(".form-step");
+        const stepIndicators = document.querySelectorAll(".step");
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+        const submitBtn = document.getElementById("submitBtn");
+        const progressFill = document.getElementById("progressFill");
+        const loadingOverlay = document.getElementById("loadingOverlay");
+        const form = document.getElementById("assessmentForm");
+
+        // Step navigation
+        function updateStep(step) {
+          // Hide all steps
+          steps.forEach((s) => s.classList.remove("active"));
+          stepIndicators.forEach((s) =>
+            s.classList.remove("active", "completed")
+          );
+
+          // Show current step
+          const currentStepElement = document.querySelector(
+            `.form-step[data-step="${step}"]`
+          );
+          if (currentStepElement) {
+            currentStepElement.classList.add("active");
+          }
+
+          // Update step indicators
+          for (let i = 1; i <= totalSteps; i++) {
+            const indicator = document.querySelector(`.step[data-step="${i}"]`);
+            if (i < step) {
+              indicator.classList.add("completed");
+            } else if (i === step) {
+              indicator.classList.add("active");
+            }
+          }
+
+          // Update progress
+          const progress = (step / totalSteps) * 100;
+          progressFill.style.width = progress + "%";
+
+          // Update navigation buttons
+          prevBtn.disabled = step === 1;
+          nextBtn.style.display = step === totalSteps ? "none" : "inline-flex";
+          submitBtn.style.display =
+            step === totalSteps ? "inline-flex" : "none";
+        }
+
+        // Navigation event listeners
+        prevBtn.addEventListener("click", () => {
+          if (currentStep > 1) {
+            currentStep--;
+            updateStep(currentStep);
+          }
+        });
+
+        nextBtn.addEventListener("click", () => {
+          if (validateCurrentStep()) {
+            if (currentStep < totalSteps) {
+              currentStep++;
+              updateStep(currentStep);
+            }
+          }
+        });
+
+        // Validation
+        function validateCurrentStep() {
+          const activeStep = document.querySelector(".form-step.active");
+          const requiredFields = activeStep.querySelectorAll("[required]");
+          let isValid = true;
+
+          requiredFields.forEach((field) => {
+            const errorMsg =
+              field.parentElement.querySelector(".error-message");
+
+            if (!field.value.trim()) {
+              isValid = false;
+              field.classList.add("error");
+              if (errorMsg) {
+                errorMsg.style.display = "block";
+              }
+            } else {
+              field.classList.remove("error");
+              if (errorMsg) {
+                errorMsg.style.display = "none";
+              }
+            }
+          });
+
+          // Age validation
+          const ageField = activeStep.querySelector("#age");
+          if (ageField && ageField.value) {
+            const age = parseInt(ageField.value);
+            const errorMsg =
+              ageField.parentElement.querySelector(".error-message");
+
+            if (age < 1 || age > 120) {
+              isValid = false;
+              ageField.classList.add("error");
+              if (errorMsg) {
+                errorMsg.textContent = "Please enter a valid age (1-120)";
+                errorMsg.style.display = "block";
+              }
+            }
+          }
+
+          return isValid;
+        }
+
+        // Real-time validation
+        document.querySelectorAll(".form-control").forEach((field) => {
+          field.addEventListener("change", () => {
+            const errorMsg =
+              field.parentElement.querySelector(".error-message");
+            field.classList.remove("error");
+            if (errorMsg) {
+              errorMsg.style.display = "none";
+            }
+          });
+        });
+
+        // Form submission
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          if (!validateCurrentStep()) {
+            return;
+          }
+
+          // Show loading
+          loadingOverlay.style.display = "flex";
+
+          // Disable submit button
+          submitBtn.disabled = true;
+          submitBtn.textContent = "Processing...";
+
+          try {
+            // Collect form data
+            const formData = new FormData(form);
+
+            // Submit via AJAX
+            const response = await fetch("/predict", {
+              method: "POST",
+              body: formData,
+            });
+
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const result = await response.text();
+            console.log("Server response:", result); // Debug log
+
+            // Hide loading
+            loadingOverlay.style.display = "none";
+
+            // Show result in modal
+            showResultModal(result);
+
+            // Reset form (don't reset immediately, let user decide)
+            // form.reset();
+            // currentStep = 1;
+            // updateStep(currentStep);
+          } catch (error) {
+            console.error("Error:", error);
+            loadingOverlay.style.display = "none";
+            alert(
+              "An error occurred: " + error.message + ". Please try again."
+            );
+          } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Get Results";
+          }
+        });
+
+        // Initialize first step
+        updateStep(currentStep);
+
+        // Modal functions
+        function showResultModal(htmlResponse) {
+          const modal = document.getElementById("resultModal");
+          const content = document.getElementById("resultContent");
+
+          // Create a temporary DOM element to parse the HTML
+          const tempDiv = document.createElement("div");
+          tempDiv.innerHTML = htmlResponse;
+
+          // Look for the result in the HTML
+          let resultText = "";
+          let resultClass = "";
+
+          // Check for "Low Risk Detected" (prediction == 0)
+          if (
+            htmlResponse.includes("Low Risk Detected") ||
+            htmlResponse.includes("No Lung Cancer Detected")
+          ) {
+            resultText = "No Lung Cancer Detected";
+            resultClass = "result-negative";
+          }
+          // Check for "Risk Factors Detected" (prediction == 1)
+          else if (
+            htmlResponse.includes("Risk Factors Detected") ||
+            htmlResponse.includes("Lung Cancer Detected")
+          ) {
+            resultText = "Lung Cancer Detected";
+            resultClass = "result-positive";
+          } else {
+            resultText = "Assessment Complete";
+            resultClass = "";
+          }
+
+          // Create the modal content
+          let modalHTML = `
+                    <div class="${resultClass}">
+                        <h2>${resultText}</h2>
+                    </div>
+                    <p style="margin-top: 15px; color: #666; text-align: left;">
+                        <strong>Important:</strong> This assessment is for informational purposes only and should not be considered as medical advice, diagnosis, or treatment. 
+                        If you have health concerns, please consult with healthcare professionals.
+                    </p>
+                    <div class="modal-actions">
+                        <button class="btn-modal-primary" onclick="closeResultModal()">Close</button>
+                        <button class="btn-modal-secondary" onclick="resetAssessment()">Take Assessment Again</button>
+                    </div>
+                `;
+
+          // If we couldn't parse the result, show debug info
+          if (resultText === "Assessment Complete") {
+            modalHTML += `
+                        <details style="margin-top: 15px;">
+                            <summary>Debug Info (click to view)</summary>
+                            <div style="background: #f5f5f5; padding: 10px; margin-top: 10px; font-size: 12px; text-align: left;">
+                                <strong>Raw Response:</strong><br>
+                                <pre style="white-space: pre-wrap; word-wrap: break-word;">${htmlResponse.substring(
+                                  0,
+                                  500
+                                )}${
+              htmlResponse.length > 500 ? "..." : ""
+            }</pre>
+                            </div>
+                        </details>
+                    `;
+          }
+
+          content.innerHTML = modalHTML;
+
+          modal.style.display = "flex";
+        }
+
+        window.closeResultModal = function () {
+          const modal = document.getElementById("resultModal");
+          modal.style.display = "none";
+        };
+
+        window.resetAssessment = function () {
+          closeResultModal();
+          // Reset form and go back to step 1
+          form.reset();
+          currentStep = 1;
+          updateStep(currentStep);
+          // Clear any error states
+          document.querySelectorAll(".form-control").forEach((field) => {
+            field.classList.remove("error");
+          });
+          document.querySelectorAll(".error-message").forEach((msg) => {
+            msg.style.display = "none";
+          });
+        };
+
+        // Close modal when clicking outside
+        document
+          .getElementById("resultModal")
+          .addEventListener("click", function (e) {
+            if (e.target === this) {
+              closeResultModal();
+            }
+          });
+      });
+    </script>
+  </body>
 </html>
