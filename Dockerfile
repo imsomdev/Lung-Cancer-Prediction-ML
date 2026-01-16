@@ -22,4 +22,4 @@ USER appuser
 EXPOSE 5000
 
 # Run the Flask app with gunicorn for production
-CMD ["gunicorn", "--bind", "127.0.0.1:5000", "--workers", "4", "--worker-class", "sync", "--timeout", "120", "--max-requests", "1000", "--max-requests-jitter", "100", "app:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "4", "--worker-class", "sync", "--timeout", "120", "--max-requests", "1000", "--max-requests-jitter", "100", "app:app"]
